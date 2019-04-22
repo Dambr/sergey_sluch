@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang = "ru">
+<head>
+	<meta charset="utf-8">
+	<title>Метод повторяющегося случайного поиска</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<center>
+		<table border="1" cellpadding="4" cellspacing="0">
+			<tr>
+				<td>Целевая функция</td>
+				<td colspan="3"><input type="text" name="W" style="width: 225px;"></td> <!-- 0 -->
+			</tr>
+			<tr>
+				<td>Значение параметра x0</td>
+				<!--<td>Значение параметра x2</td>-->
+				<td colspan="1"><input type="text" name="x1" style="width: 75px;"></td> <!-- 1 -->
+				<!--<td colspan="1"><input type="text" name="x2" style="width: 75px;"></td>--> <!-- 2 -->
+			</tr>
+			<tr>
+				<td colspan="1">Значение параметра y(рек 0.5)</td> 
+				<td colspan="1">Значение параметра b(рек 0.5)</td>
+			</tr>
+			<tr>
+				<td colspan="1"><input type="text" name="y" style="width: 75px;"></td> <!-- 2 -->
+				<td colspan="1"><input type="text" name="b" style="width: 75px;"></td> <!-- 3 -->
+			</tr>
+			<tr>
+				<td colspan="1">Значение параметра d</td> 
+				<td colspan="1">Значение параметра l</td>
+			</tr>
+			<tr>
+				<td colspan="1"><input type="text" name="d" style="width: 75px;"></td> <!-- 4 -->
+				<td colspan="1"><input type="text" name="l" style="width: 75px;"></td> <!-- 5 -->
+			</tr>
+			<tr>
+				<td colspan="1">Значение параметра M</td> 
+				<td colspan="1">Значение параметра Ef</td>
+			</tr>
+			<tr>
+				<td colspan="1"><input type="text" name="M" style="width: 75px;"></td>  <!-- 6 -->
+				<td colspan="1"><input type="text" name="Ef" style="width: 75px;"></td> <!-- 7 -->
+			</tr>
+		</table>
+	</center>
+	<button onclick="show()">Рассчет</button>
+	<script>
+		const linear = require('linear-solve');
+		function show(){
+			const linear = require('linear-solve');
+			const combinations = require ('combinations-generator');
+			for (i = 0; i < 7; i ++){
+				if (String(document.getElementsByTagName("input")[4].value) == ""){
+					alert("Не все поля заполнены");
+					return;
+				}
+			}
+			function W(x1, x2){
+				return eval(document.getElementsByTagName("input")[0].value);
+			}
+			function round(arg, number){
+				return Math.round(arg * Math.pow(10, number)) / Math.pow(10, number);
+			}
+			function W(x1, x2){
+				return eval("x1 + x2");
+			}
+			function len(x){
+				return String(Math.round(x)).length;
+			}
+			// Шаг 1
+			//d = 1.5;
+			d = document.getElementsByTagName("input")[4].value;
+			//x1 = 5;
+			x1 = document.getElementsByTagName("input")[1].value;
+			//x2 = x1 - d;
+			x2 = x1 - d;
+			//lam = 2;
+			lam = document.getElementsByTagName("input")[5].value;
+			//b = 0.5;
+			b = document.getElementsByTagName("input")[3].value;
+			//y = 0.5;
+			y = document.getElementsByTagName("input")[2].value;
+			r = 2;
+			//M = 5;
+			M = document.getElementsByTagName("input")[6].value;
+			//Ef = 0.5;
+			Ef = document.getElementsByTagName("input")[7].value;
+			// Шаг 2
+			_x1 = 0;
+			_x2 = 0;
+			while(true){
+				x = [[x1, x2]];
+				w = [];
+				for (i = 1; i < M; i ++){
+					phi = 2 * Math.random() - 1;
+					x.push(x1 + lam * phi);
+					x[i] = [x[i], x[i] - d];
+				}
+				for (i = 0; i < M; i ++){
+					w.push(W(...x[i]));
+				}
+				par = 0;
+				for (i = 1; i < M; i ++){
+					if (w[i] > w[0]){
+						par = i;
+					}
+				}
+				if (par == 0){
+					break;
+				}
+				_x1 = x[par][0];
+				_x2 = x[par][1];
+			}
+			boo = true;
+			while(boo){
+				// Шаг 3
+				s_2 = [x1, x2];
+				s_1 = [_x1, _x2];
+				s = [ y * s_1[0] + (1 - y) * s_2[0], y * s_1[1] + (1 - y) * s_2[1] ];
+				s_2 = s_1;
+				s_1 = s;
+				delta = [b * (s[0]/Math.pow(10, len(s[0]))) + (1 - b) * Math.random(), b * (s[1]/Math.pow(10, len(s[1]))) + (1 - b) * Math.random() ];
+				x1 = _x1;
+				x2 = _x2;
+				_x1 = _x1 + lam * delta[0];
+				_x2 = _x2 + lam * delta[1];
+				f = W(_x1, _x2);
+				// Шаг 4
+				if (W(_x1, _x2) > W(x1, x2)){
+					if (Math.abs(W(_x1, _x2) - W(x1, x2)) <= Ef){
+						console.log(_x1, _x2);
+						boo = false;
+					}
+				}
+				else{
+					lam = lam / 2;
+					r += 1;
+				}
+			}
+			alert("Значения параметров:\nx1 = " + round(_x1, 2) + "  x2 = " + round(_x2, 2) + "\nЗначение целевой функции = " + round(W(_x1, _x2), 2));
+		}
+		require('./render.js');
+	</script>
+</body>
+</html>

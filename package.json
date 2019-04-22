@@ -1,0 +1,16 @@
+{
+  "name": "Procenko",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "combinations-generator": "^1.0.1",
+    "electron": "^4.1.4",
+    "linear-solve": "^1.2.1"
+  }
+}

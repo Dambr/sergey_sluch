@@ -1,0 +1,28 @@
+*{
+	color: blue;
+	cursor: default;
+	font-size: 14pt;
+	font-family: "Tahoma";
+}
+body{
+	background-image: url("../img/bg.png");
+}
+table{
+	margin-top: 40px;
+}
+table, input{
+	text-align: center;
+}
+input{
+	cursor: text;
+	border-radius: 10px;
+	border-width: 0.5px;
+	outline:none;
+	width: 75px;
+	color: green;
+}
+button{
+	margin-left: 15%;
+	margin-top: 15px;
+	cursor: pointer;
+}
