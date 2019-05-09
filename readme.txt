@@ -1,1 +1,0 @@
-http://bigor.bmstu.ru/?cnt/?doc=MO/ch0802.mod/?cou=MO/MO.cou
